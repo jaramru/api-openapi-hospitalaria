@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: API Normativa Técnica Hospitalaria
+  version: 1.0.0
+  description: >
+    API para consultar normativa técnica, generar checklists, comparar normativas,
+    buscar documentos oficiales y exportar informes personalizados por área hospitalaria.
+servers:
+  - url: https://api.iaedulab.com/api
+paths:
+  /consulta.php:
+    post:
+      operationId: consultarNormativa
+      summary: Consultar normativa aplicable por tipo de instalación y comunidad autónoma
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tipoInstalacion:
+                  type: string
+                  description: Tipo de instalación técnica (ej: gases, eléctrica)
+                ubicacion:
+                  type: string
+                  description: Comunidad autónoma (ej: Andalucía)
+      responses:
+        '200':
+          description: Resumen de la normativa aplicable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  realDecreto:
+                    type: string
+                  resumen:
+                    type: string
+                  enlaces:
+                    type: array
+                    items:
+                      type: string
+
+  /checklist.php:
+    post:
+      operationId: generarChecklist
+      summary: Genera una checklist de cumplimiento legal para una instalación hospitalaria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tipoInstalacion:
+                  type: string
+                normativa:
+                  type: string
+      responses:
+        '200':
+          description: Checklist generada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    item:
+                      type: string
+                    cumplido:
+                      type: boolean
+                    observaciones:
+                      type: string
+
+  /comparar.php:
+    post:
+      operationId: compararNormativas
+      summary: Compara los requisitos de dos normativas técnicas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                normativa1:
+                  type: string
+                normativa2:
+                  type: string
+      responses:
+        '200':
+          description: Tabla comparativa entre normativas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    criterio:
+                      type: string
+                    normativa1:
+                      type: string
+                    normativa2:
+                      type: string
+
+  /documentos.php:
+    get:
+      operationId: buscarDocumentos
+      summary: Buscar documentos oficiales según área normativa y comunidad
+      parameters:
+        - in: query
+          name: area
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: comunidad
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de documentos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nombre:
+                      type: string
+                    referencia:
+                      type: string
+                    enlaceBOE:
+                      type: string
+
+  /exportarInforme.php:
+    post:
+      operationId: exportarInforme
+      summary: Exporta un informe customizado por área hospitalaria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                areas:
+                  type: array
+                  items:
+                    type: string
+                  description: Áreas hospitalarias a incluir (ej: eléctrica, gases)
+                incluirResumenNormativo:
+                  type: boolean
+                  description: Incluir resumen legal por cada área
+      responses:
+        '200':
+          description: Enlace de descarga del informe generado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nombreArchivo:
+                    type: string
+                  enlaceDescarga:
+                    type: string
