@@ -153,7 +153,8 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: Áreas hospitalarias a incluir (ej: eléctrica, gases)
+                  # ✅ esta línea estaba mal indentada antes
+                description: Áreas hospitalarias a incluir (ej: eléctrica, gases)
                 incluirResumenNormativo:
                   type: boolean
                   description: Incluir resumen legal por cada área
