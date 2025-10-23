@@ -5,8 +5,10 @@ info:
   description: >
     API para consultar normativa técnica, generar checklists, comparar normativas,
     buscar documentos oficiales y exportar informes personalizados por área hospitalaria.
+
 servers:
   - url: https://api.iaedulab.com/api
+
 paths:
   /consulta.php:
     post:
@@ -153,8 +155,7 @@ paths:
                   type: array
                   items:
                     type: string
-                  # ✅ esta línea estaba mal indentada antes
-                description: Áreas hospitalarias a incluir (ej: eléctrica, gases)
+                  description: Áreas hospitalarias a incluir (ej: eléctrica, gases)
                 incluirResumenNormativo:
                   type: boolean
                   description: Incluir resumen legal por cada área
